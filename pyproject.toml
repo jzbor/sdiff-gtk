@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "sdiff-gtk"
+version = "0.1.0"
+description = ""
+authors = ["jzbor <jzbor@posteo.net>"]
+readme = "README.md"
+packages = [{include = "sdiff_gtk", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pygobject = "^3.42.2"
+diffusers = "^0.11.1"
+pillow = "^9.4.0"
+torch = "^1.13.1"
+transformers = "^4.25.1"
+accelerate = "^0.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
