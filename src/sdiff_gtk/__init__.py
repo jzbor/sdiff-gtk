@@ -1,10 +1,11 @@
 import array
-import torch
 import gi
+import os.path
+import torch
+from PIL import Image
+from diffusers import StableDiffusionPipeline
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GLib
-from diffusers import StableDiffusionPipeline
-from PIL import Image
 from threading import Thread
 
 
@@ -51,11 +52,14 @@ class SaveableImage(Gtk.EventBox):
         if response == Gtk.ResponseType.OK:
             filename = file_chooser.get_filename()
             self.parent.save_path = file_chooser.get_current_folder()
-            if not (filename.endswith('.png') or filename.endswith('.PNG')):
-                    filename += '.png'
-            print('Saving image to', filename)
-            self.image.save(filename)
+            self.save_as(filename)
         file_chooser.destroy()
+
+    def save_as(self, filename):
+        if not (filename.endswith('.png') or filename.endswith('.PNG')):
+            filename += '.png'
+        print('Saving image to', filename)
+        self.image.save(filename)
 
 
 class ApplicationWindow(Gtk.Window):
@@ -90,6 +94,9 @@ class ApplicationWindow(Gtk.Window):
         self.image_box = Gtk.FlowBox()
         self.image_window.add(self.image_box);
         self.main_box.pack_start(self.image_window, True, True, 5)
+        self.save_all_button = Gtk.Button(label='Save all images')
+        self.save_all_button.connect('clicked', self.save_all)
+        self.main_box.pack_start(self.save_all_button, False, True, 5)
         self.clear_button = Gtk.Button(label='Clear images')
         self.clear_button.connect('clicked', self.clear_images)
         self.main_box.pack_start(self.clear_button, False, True, 5)
@@ -176,6 +183,26 @@ class ApplicationWindow(Gtk.Window):
 
         thread = Thread(target=self.generate_images, args=(prompt, steps, nimages, width, height, device, low_mem))
         thread.start()
+
+    def save_all(self, _source):
+        file_chooser = Gtk.FileChooserDialog(title='Please choose a destination',
+                                             action=Gtk.FileChooserAction.SELECT_FOLDER,
+                                             transient_for=self)
+        file_chooser.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
+        file_chooser.set_current_folder(self.save_path)
+
+        response = file_chooser.run()
+        print(response == Gtk.ResponseType.OK, file_chooser.get_filename())
+        if response == Gtk.ResponseType.OK:
+            self.save_path = file_chooser.get_filename()
+            image_widgets = self.image_box.get_children()
+            for i, image_widget in enumerate(image_widgets):
+                print('save')
+                path = os.path.join(self.save_path, f"sdiff-gtk-{i}.png")
+                image_widget.get_child().save_as(path)
+        file_chooser.destroy()
+
 
     def show_running(self, state):
         if state:
