@@ -1,5 +1,5 @@
 # sdiff-gtk
-...is a GTK+ application for generating Images with [Stable Diffusion](https://github.com/Stability-AI/stablediffusion).
+...is a GTK+ application for generating images with [Stable Diffusion](https://github.com/Stability-AI/stablediffusion).
 It uses [diffusers](https://github.com/huggingface/diffusers) to do the actual inference and downloads the model from [huggingface](https://huggingface.co/) when first used.
 Initial downloading might take a while, but the model will be cached for later use.
 
@@ -12,5 +12,12 @@ I haven't gotten around to properly packaging the application yet, so for now yo
 poetry install
 poetry run python src/sdiff_gtk/__init__.py
 ```
-Note that you might have to `gobject-introspection` package on your system, as it is required to build the python package `gobject`.
 
+Note that you might have to install `gobject-introspection` package on your system, as it is required to build the python package `gobject`.
+
+### Installing on Arch
+
+1. [Install python](https://wiki.archlinux.org/title/python#Installation)
+2. Install packages (e.g. using yay): `yay -S python-poetry gobject-introspection cuda`
+3. Clone this repository and open in terminal
+4. Execute commands from above
