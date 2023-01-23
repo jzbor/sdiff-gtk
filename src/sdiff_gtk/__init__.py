@@ -50,6 +50,8 @@ class SaveableImage(Gtk.EventBox):
         response = file_chooser.run()
         if response == Gtk.ResponseType.OK:
             filename = file_chooser.get_filename()
+            if not (filename.endswith('.png') or filename.endswith('.PNG')):
+                    filename += '.png'
             print('Saving image to', filename)
             self.image.save(filename)
         file_chooser.destroy()
