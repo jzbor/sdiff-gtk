@@ -12,9 +12,10 @@ MODEL='runwayml/stable-diffusion-v1-5'
 
 
 class SaveableImage(Gtk.EventBox):
-    def __init__(self, image):
+    def __init__(self, image, parent):
         super().__init__()
         self.image = image
+        self.parent = parent
 
         pixbuf = img_to_pixbuf(image)
         self.image_widget = Gtk.Image(pixbuf=pixbuf);
@@ -33,23 +34,23 @@ class SaveableImage(Gtk.EventBox):
             menu.show_all()
             menu.popup_at_pointer(event)
 
-            # print(menu.get_active())
-            # if menu.get_active() == save_item:
-            #     self.save()
-
     def save(self, widget, event):
         file_chooser = Gtk.FileChooserDialog(title='Please choose a destination',
-                                             action=Gtk.FileChooserAction.SAVE)
+                                             action=Gtk.FileChooserAction.SAVE,
+                                             transient_for=self.parent)
         png_filter = Gtk.FileFilter()
         png_filter.set_name('PNG Image')
         png_filter.add_mime_type('image/png')
         file_chooser.add_filter(png_filter)
         file_chooser.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                  Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
+        file_chooser.set_current_name('sdiff.png')
+        file_chooser.set_current_folder(self.parent.save_path)
 
         response = file_chooser.run()
         if response == Gtk.ResponseType.OK:
             filename = file_chooser.get_filename()
+            self.parent.save_path = file_chooser.get_current_folder()
             if not (filename.endswith('.png') or filename.endswith('.PNG')):
                     filename += '.png'
             print('Saving image to', filename)
@@ -61,6 +62,7 @@ class ApplicationWindow(Gtk.Window):
     def __init__(self):
         super().__init__()
         self.generating = False
+        self.save_path = '.'
 
         self.main_box = Gtk.Box()
         self.main_box.set_orientation(Gtk.Orientation.VERTICAL)
@@ -197,7 +199,7 @@ class ApplicationWindow(Gtk.Window):
                         .to(device)
             for i in range(0, nimages):
                     image = pipeline(prompt, num_inference_steps=steps, width=width, height=height).images[0]
-                    image_widget = SaveableImage(image);
+                    image_widget = SaveableImage(image, self);
                     image_widget.set_visible(True)
                     # self.image_box.pack_start(image_widget, True, True, 5)
                     self.image_box.add(image_widget)
