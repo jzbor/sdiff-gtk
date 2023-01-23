@@ -104,9 +104,9 @@ class ApplicationWindow(Gtk.Window):
 
         self.machine_settings_box = Gtk.Box()
         self.device_selector = Gtk.ComboBoxText()
-        self.device_selector.append_text('CPU')
         if torch.cuda.is_available():
             self.device_selector.append_text('CUDA')
+        self.device_selector.append_text('CPU')
         self.device_selector.set_active(0)
         self.machine_settings_box.pack_start(self.device_selector, True, True, 5)
         self.low_memory_button = Gtk.CheckButton(label='Low Memory Mode')
