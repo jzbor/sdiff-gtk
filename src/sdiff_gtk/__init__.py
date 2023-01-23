@@ -86,12 +86,21 @@ class ApplicationWindow(Gtk.Window):
         self.image_box = Gtk.FlowBox()
         self.image_window.add(self.image_box);
         self.main_box.pack_start(self.image_window, True, True, 5)
+        self.clear_button = Gtk.Button(label='Clear images')
+        self.clear_button.connect('clicked', self.clear_images)
+        self.main_box.pack_start(self.clear_button, False, True, 5)
 
         self.add(self.main_box);
         self.set_default_size(800, 850)
         self.show_all()
         self.status_spinner.set_visible(False)
         self.connect('destroy', Gtk.main_quit)
+
+    def clear_images(self, _source):
+        image_widgets = self.image_box.get_children()
+        for widget in image_widgets:
+            self.image_box.remove(widget)
+            del(widget)
 
     def create_settings_frame(self):
         self.settings_frame = Gtk.Frame()
