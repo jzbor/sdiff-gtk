@@ -9,6 +9,8 @@ You can take a look at [this issue](https://github.com/huggingface/diffusers/iss
 ## Running the application
 I haven't gotten around to properly packaging the application yet, so for now your best option is to run it with poetry like so:
 ```
+poetry install
 poetry run python src/sdiff_gtk/__init__.py
 ```
+Note that you might have to `gobject-introspection` package on your system, as it is required to build the python package `gobject`.
 
