@@ -151,9 +151,9 @@ class ApplicationWindow(Gtk.Window):
         self.image_settings_box.pack_start(self.height_spin_button, False, False, 5)
         self.steps_label = Gtk.Label(label='Steps: ')
         self.steps_spin_button = Gtk.SpinButton()
-        self.steps_spin_button.set_range(1, 100)
+        self.steps_spin_button.set_range(1, 1000)
         self.steps_spin_button.set_increments(1, 10)
-        self.steps_spin_button.set_value(32)
+        self.steps_spin_button.set_value(50)
         self.image_settings_box.pack_start(self.steps_label, False, False, 5)
         self.image_settings_box.pack_start(self.steps_spin_button, False, False, 5)
         self.nimages_label = Gtk.Label(label='Number of images: ')
@@ -261,5 +261,9 @@ def img_to_pixbuf(img):
                                            False, 8, width, height, width * 3)
 
 if __name__ == '__main__':
+    # gradient calculation is not required for inference and might slow things down
+    # so we can disable it
+    torch.no_grad()
+
     ApplicationWindow()
     Gtk.main()
