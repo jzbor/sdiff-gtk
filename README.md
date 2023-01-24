@@ -15,9 +15,6 @@ poetry run python src/sdiff_gtk/__init__.py
 
 Note that you might have to install `gobject-introspection` package on your system, as it is required to build the python package `gobject`.
 
-### Installing on Arch
-
-1. [Install python](https://wiki.archlinux.org/title/python#Installation)
-2. Install packages (e.g. using yay): `yay -S python-poetry gobject-introspection cuda`
-3. Clone this repository and open in terminal
-4. Execute commands from above
+### Arch Linux-based platforms
+You can install this program from the AUR.
+It is available as `sdiff-gtk`.
