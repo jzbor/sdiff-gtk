@@ -19,8 +19,8 @@ class SaveableImage(Gtk.EventBox):
         self.parent = parent
 
         pixbuf = img_to_pixbuf(image)
-        self.image_widget = Gtk.Image(pixbuf=pixbuf);
-        self.image_widget.set_visible(True);
+        self.image_widget = Gtk.Image(pixbuf=pixbuf)
+        self.image_widget.set_visible(True)
         self.add(self.image_widget)
 
         self.connect('button-press-event', self.show_menu)
@@ -92,7 +92,7 @@ class ApplicationWindow(Gtk.Window):
 
         self.image_window = Gtk.ScrolledWindow()
         self.image_box = Gtk.FlowBox()
-        self.image_window.add(self.image_box);
+        self.image_window.add(self.image_box)
         self.main_box.pack_start(self.image_window, True, True, 5)
         self.save_all_button = Gtk.Button(label='Save all images')
         self.save_all_button.connect('clicked', self.save_all)
@@ -101,7 +101,7 @@ class ApplicationWindow(Gtk.Window):
         self.clear_button.connect('clicked', self.clear_images)
         self.main_box.pack_start(self.clear_button, False, True, 5)
 
-        self.add(self.main_box);
+        self.add(self.main_box)
         self.set_default_size(800, 850)
         self.show_all()
         self.status_spinner.set_visible(False)
@@ -226,7 +226,7 @@ class ApplicationWindow(Gtk.Window):
                         .to(device)
             for i in range(0, nimages):
                     image = pipeline(prompt, num_inference_steps=steps, width=width, height=height).images[0]
-                    image_widget = SaveableImage(image, self);
+                    image_widget = SaveableImage(image, self)
                     image_widget.set_visible(True)
                     # self.image_box.pack_start(image_widget, True, True, 5)
                     self.image_box.add(image_widget)
