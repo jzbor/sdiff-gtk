@@ -6,7 +6,8 @@ from PIL import Image
 from diffusers import StableDiffusionPipeline
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GdkPixbuf, GLib
-from threading import Thread
+# from threading import Thread, Event
+from multiprocessing import Process
 
 
 MODEL='runwayml/stable-diffusion-v1-5'
@@ -86,6 +87,9 @@ class ApplicationWindow(Gtk.Window):
         self.start_button = Gtk.Button(label='Start')
         self.start_button.connect('clicked', self.start_diffusion)
         self.button_box.pack_start(self.start_button, True, True, 5)
+        self.stop_button = Gtk.Button(label='Stop')
+        self.stop_button.connect('clicked', self.stop_generation)
+        self.button_box.pack_start(self.stop_button, True, True, 5)
         self.status_spinner = Gtk.Spinner()
         self.button_box.pack_start(self.status_spinner, False, False, 5)
         self.main_box.pack_start(self.button_box, False, True, 5)
@@ -181,8 +185,15 @@ class ApplicationWindow(Gtk.Window):
 
         self.show_running(True)
 
-        thread = Thread(target=self.generate_images, args=(prompt, steps, nimages, width, height, device, low_mem))
-        thread.start()
+        self.thread = Process(target=self.generate_images, args=(prompt, steps, nimages, width, height, device, low_mem))
+        self.thread.start()
+
+    def stop_generation(self, _source):
+        if (self.thread and self.generating):
+            self.thread.terminate()
+            self.generating = False
+            print('Killed worker')
+            self.show_running(False)
 
     def save_all(self, _source):
         file_chooser = Gtk.FileChooserDialog(title='Please choose a destination',
