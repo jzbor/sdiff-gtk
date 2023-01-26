@@ -14,13 +14,18 @@ from diffusionbox import DiffusionBox
 
 MODEL='runwayml/stable-diffusion-v1-5'
 
+T2T_MODELS = [
+    'runwayml/stable-diffusion-v1-5',
+    'stabilityai/stable-diffusion-2-base',
+]
+
 
 class ApplicationWindow(Gtk.Window):
     def __init__(self):
         super().__init__()
 
         prompt_frame = TextPromptFrame()
-        self.diffusion_box = DiffusionBox(prompt_frame)
+        self.diffusion_box = DiffusionBox(T2T_MODELS, prompt_frame)
         self.add(self.diffusion_box)
 
         self.set_default_size(800, 850)

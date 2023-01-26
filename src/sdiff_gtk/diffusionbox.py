@@ -9,10 +9,11 @@ from widgets import ImageView
 
 
 class DiffusionBox(Gtk.Box):
-    def __init__(self, prompt_widget, settings=DiffusionSettings(), window=None):
+    def __init__(self, models, prompt_widget, settings=DiffusionSettings(), window=None):
         super().__init__()
         self.window = window
         self.set_orientation(Gtk.Orientation.VERTICAL)
+        self.models = models
 
         # add settings panel
         self.create_settings_frame()
@@ -48,6 +49,15 @@ class DiffusionBox(Gtk.Box):
         self.settings_box = Gtk.Box()
         self.settings_box.set_orientation(Gtk.Orientation.VERTICAL)
         self.settings_frame.add(self.settings_box)
+
+        # selector for model
+        self.model_box = Gtk.Box()
+        self.model_selector = Gtk.ComboBoxText()
+        for model in self.models:
+            self.model_selector.append_text(model)
+        self.model_selector.set_active(0)
+        self.model_box.pack_start(self.model_selector, True, True, 5)
+        self.settings_box.pack_start(self.model_box, False, False, 5)
 
         # configuration options for machine and acceleration platform
         self.machine_settings_box = Gtk.Box()
@@ -107,7 +117,7 @@ class DiffusionBox(Gtk.Box):
     def start_diffusion(self, _source):
         prompt = self.prompt_widget.get_prompt()
         settings = DiffusionSettings(
-            model = 'runwayml/stable-diffusion-v1-5',
+            model = self.model_selector.get_active_text(),
             device = self.device_selector.get_active_text().lower(),
             low_mem = self.low_memory_button.get_active(),
             width = self.width_spin_button.get_value_as_int(),
@@ -117,7 +127,7 @@ class DiffusionBox(Gtk.Box):
         )
         error_reporter = ErrorReporter(window=self.window)
 
-        job = DiffusionJob(prompt, settings, self.image_view, error_reporter)
+        job = DiffusionJob(self.models, prompt, settings, self.image_view, error_reporter)
         job.run_async()
 
 

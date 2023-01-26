@@ -18,7 +18,7 @@ class DiffusionJob:
     running_thread = None
     ui_states = []
 
-    def __init__(self, prompt, settings, image_view, error_reporter):
+    def __init__(self, models, prompt, settings, image_view, error_reporter):
         self.prompt = prompt
         self.settings = settings
         self.image_view = image_view
@@ -44,8 +44,10 @@ class DiffusionJob:
         pipeline = None
         try:
             # create pipeline
-            pipeline = StableDiffusionPipeline.from_pretrained(self.settings.model, low_cpu_mem_usage=self.settings.low_mem) \
-                    .to(self.settings.device)
+            pipeline = StableDiffusionPipeline.from_pretrained(
+                    self.settings.model,
+                    low_cpu_mem_usage = self.settings.low_mem
+            ).to(self.settings.device)
 
             # generate self.settings.nimages images from pipeline
             for i in range(0, self.settings.nimages):
