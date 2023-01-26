@@ -59,7 +59,7 @@ class DiffusionJob:
             del(pipeline)
 
         if DiffusionJob.running_thread == threading.current_thread():
-            self.running_thread = None
+            DiffusionJob.running_thread = None
             DiffusionJob.report_state(False)
 
     def run_async(self):
