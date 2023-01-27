@@ -4,9 +4,10 @@ from threading import Thread
 
 
 class DiffusionSettings:
-    def __init__(self, model=None, device='cpu', low_mem=True, width=256, height=256, steps=50, nimages=1):
+    def __init__(self, model=None, device='cpu', offline=False, low_mem=True, width=256, height=256, steps=50, nimages=1):
         self.model = model
         self.device = device
+        self.offline = offline
         self.low_mem = low_mem
         self.width = width
         self.height = height
@@ -46,7 +47,8 @@ class DiffusionJob:
             # create pipeline
             pipeline = StableDiffusionPipeline.from_pretrained(
                     self.settings.model,
-                    low_cpu_mem_usage = self.settings.low_mem
+                    low_cpu_mem_usage = self.settings.low_mem,
+                    local_files_only = self.settings.offline,
             ).to(self.settings.device)
 
             # generate self.settings.nimages images from pipeline

@@ -57,6 +57,8 @@ class DiffusionBox(Gtk.Box):
             self.model_selector.append_text(model)
         self.model_selector.set_active(0)
         self.model_box.pack_start(self.model_selector, True, True, 5)
+        self.offline_button = Gtk.CheckButton(label='Offline mode')
+        self.model_box.pack_start(self.offline_button, False, False, 5)
         self.settings_box.pack_start(self.model_box, False, False, 5)
 
         # configuration options for machine and acceleration platform
@@ -67,7 +69,7 @@ class DiffusionBox(Gtk.Box):
         self.device_selector.append_text('CPU')
         self.device_selector.set_active(0)
         self.machine_settings_box.pack_start(self.device_selector, True, True, 5)
-        self.low_memory_button = Gtk.CheckButton(label='Low Memory Mode')
+        self.low_memory_button = Gtk.CheckButton(label='Low memory mode')
         self.low_memory_button.set_active(settings.low_mem)
         self.machine_settings_box.pack_start(self.low_memory_button, False, False, 5)
         self.settings_box.pack_start(self.machine_settings_box, False, False, 5)
@@ -119,6 +121,7 @@ class DiffusionBox(Gtk.Box):
         settings = DiffusionSettings(
             model = self.model_selector.get_active_text(),
             device = self.device_selector.get_active_text().lower(),
+            offline = self.offline_button.get_active(),
             low_mem = self.low_memory_button.get_active(),
             width = self.width_spin_button.get_value_as_int(),
             height = self.height_spin_button.get_value_as_int(),
