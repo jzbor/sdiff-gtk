@@ -31,6 +31,7 @@ class ApplicationWindow(Gtk.Window):
         self.set_default_size(800, 850)
         self.set_visible(True)
         self.connect('destroy', Gtk.main_quit)
+        self.set_title('Stable Diffusion GTK');
 
 if __name__ == '__main__':
     # gradient calculation is not required for inference and might slow things down
