@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sdiff-gtk"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["jzbor <jzbor@posteo.net>"]
 readme = "README.md"
