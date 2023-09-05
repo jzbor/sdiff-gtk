@@ -12,8 +12,8 @@ pygobject = "^3.42.2"
 diffusers = "^0.11.1"
 pillow = "^9.4.0"
 torch = "^1.13.1"
-transformers = "^4.25.1"
-accelerate = "^0.15.0"
+transformers = "^4.30.0"
+accelerate = "^0.20.3"
 
 
 [build-system]
